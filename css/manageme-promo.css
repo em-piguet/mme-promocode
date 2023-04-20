@@ -1,0 +1,22 @@
+.mm-promo-form {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1em;
+    align-items: center;
+
+}
+.mm-promo-field {
+    max-width: 500px;
+}
+.mm-promo-message {
+    padding: 1em;
+    color: #a6a6a6;
+}
+.mm-promo-submit {
+    display: flex !important;
+    align-items: center;
+    gap: 1rem;
+}
+.mm-promo-info a {
+    border-bottom: 1px solid;
+}
