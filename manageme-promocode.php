@@ -8,7 +8,7 @@
  * Plugin Name:       ManageMe Promo Code
  * Plugin URI:        manage-me.pro
  * Description:       Shortcode pour le code Promo -> [manageme_promocode societyid="XXX"]
- * Version:           1.0.5
+ * Version:           1.0.6
  * Author:            Wonderweb
  * Author URI:        wonderweb.ch
  * License:           GPL-2.0+
