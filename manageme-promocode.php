@@ -41,7 +41,7 @@ function run_manageme_promo_api()
  */
 function enqueue_manageme_promo_assets()
 {
-    wp_enqueue_script('manageme-promo-api-js', plugin_dir_url(__FILE__).'js/manageme-promo.js', ['jquery'], MANAGEME_PROMOCODE_VERSION, false);
+    wp_enqueue_script('manageme-promo-api-js', plugin_dir_url(__FILE__).'js/manageme-promo.js', [], MANAGEME_PROMOCODE_VERSION, false);
     wp_enqueue_style('manageme-promo-api-css', plugin_dir_url(__FILE__).'css/manageme-promo.css', [], MANAGEME_PROMOCODE_VERSION, 'all');
 }
 

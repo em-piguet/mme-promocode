@@ -3,47 +3,67 @@
  * Author : Wonderweb
  */
 
-     (function( $ ) {
+(function () {
+  "use strict";
 
-    "use strict";
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("manage-me promo loaded"); // Debug
+    var base_url = "https://www.manage-me.pro/api/society/";
+    document.querySelectorAll(".mm-promo-form").forEach(function (form) {
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
 
-    $(document).ready(function() {
+        var spinner = this.querySelector(".mm-promo-spinner");
+        var id = this.dataset.society;
+        var promoField = this.querySelector(".mm-promo-field");
+        var promo = promoField.value;
 
-		var base_url =  'https://www.manage-me.pro/api/society/';
+        if (promo.length !== 0) {
+          var api_url = base_url + id + "/promocode/" + promo;
+          console.log("URL de l'API appelée :", api_url); // Debug
 
-		$(".mm-promo-form").submit(function(event) {
-			var $spinner = $(this).find('.mm-promo-spinner');
-			var id = $(this).data('society');
-			event.preventDefault();
-			event.stopImmediatePropagation();
-			var promo = $(this).find('.mm-promo-field').val(); //'P8SN98NJ47';
-			if(promo.length !== 0){
-				var api_url = base_url + id + '/promocode/' + promo ;
-				$spinner.show();
-				$.ajax({
-					url : api_url,
-					type: "GET",
-					success : function(){
-					},
-					complete : function(data,statusText){
-						$spinner.hide();
-						message(data.responseJSON,statusText);
-					}
-				});
-			}
-		});
+          spinner.style.display = "block";
 
-		function message(result,status){
-			if(status === 'error') {
-				$(".mm-promo-info").html(result.Message);
-			}
-			if( result.IsActive === false){
-				$(".mm-promo-info").html(result.Exceptions[0]);
-			}
-			if( result.IsActive === true ){
-				$(".mm-promo-info").html( '<a href="https://www.manage-me.pro' + result.Url + '">Aller au panier</a>');
-			}
-		}
-	});
+          fetch(api_url)
+            .then((response) => {
+              console.log("Statut de la réponse :", response.status); // Debug
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Requête réussie"); // Debug
+              console.log("Réponse complète :", data); // Debug
+              message(data, "success");
+            })
+            .catch((error) => {
+              console.error("Erreur :", error); // Debug
+              message({ Message: "Une erreur est survenue" }, "error");
+            })
+            .finally(() => {
+              spinner.style.display = "none";
+            });
+        } else {
+          console.log("Le champ promo est vide"); // Debug
+        }
+      });
+    });
 
-})(jQuery);
+    function message(result, status) {
+      //   console.log("Fonction message appelée avec :", result, status); // Debug
+      var infoElement = document.querySelector(".mm-promo-info");
+
+      if (status === "error") {
+        infoElement.innerHTML = result.Message;
+      }
+      if (result.IsActive === false) {
+        infoElement.innerHTML = result.Exceptions[0];
+      }
+      if (result.IsActive === true) {
+        infoElement.innerHTML =
+          '<a href="https://www.manage-me.pro' +
+          result.Url +
+          '">Aller au panier</a>';
+      }
+    }
+  });
+})();
