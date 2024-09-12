@@ -43,6 +43,9 @@ function enqueue_manageme_promo_assets()
 {
     wp_enqueue_script('manageme-promo-api-js', plugin_dir_url(__FILE__).'js/manageme-promo.js', [], MANAGEME_PROMOCODE_VERSION, false);
     wp_enqueue_style('manageme-promo-api-css', plugin_dir_url(__FILE__).'css/manageme-promo.css', [], MANAGEME_PROMOCODE_VERSION, 'all');
+    wp_localize_script('manageme-promo-api-js', 'manageme_promo_ajax', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+    ]);
 }
 
 function manageme_promocode_check_for_updates($transient)
@@ -119,5 +122,55 @@ function manageme_promocode_plugin_info($res, $action, $args)
 
 add_filter('pre_set_site_transient_update_plugins', 'manageme_promocode_check_for_updates');
 add_filter('plugins_api', 'manageme_promocode_plugin_info', 20, 3);
+
+add_action('wp_ajax_validate_promo_code', 'validate_promo_code_callback');
+add_action('wp_ajax_nopriv_validate_promo_code', 'validate_promo_code_callback');
+
+function enqueue_manageme_promo_script()
+{
+    wp_enqueue_script('manageme-promo', plugin_dir_url(__FILE__).'js/manageme-promo.js', ['jquery'], '1.0', true);
+    wp_localize_script('manageme-promo', 'manageme_promo_ajax', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+    ]);
+}
+add_action('wp_enqueue_scripts', 'enqueue_manageme_promo_script');
+function validate_promo_code_callback()
+{
+    $society_id = $_POST['society_id'];
+    $promo_code = $_POST['promo_code'];
+
+    $shop_url = get_field('shop_url', 'option');
+
+    if ($shop_url) {
+        $api_url = $shop_url."/api/society/{$society_id}/promocode/{$promo_code}";
+    } else {
+        $api_url = "https://www.manage-me.pro/api/society/{$society_id}/promocode/{$promo_code}";
+    }
+
+    $response = wp_remote_get($api_url);
+
+    if (is_wp_error($response)) {
+        wp_send_json_error([
+            'Message' => 'Une erreur est survenue',
+            'code' => $response->get_error_code(),
+            'message' => $response->get_error_message(),
+            'debug_api_url' => $api_url, // Ajout de l'URL de l'API pour le débogage
+        ]);
+    } else {
+        $body = wp_remote_retrieve_body($response);
+        $decoded_body = json_decode($body);
+
+        // Ajout de l'URL de l'API à la réponse
+        if (is_object($decoded_body)) {
+            $decoded_body->debug_api_url = $api_url;
+        } elseif (is_array($decoded_body)) {
+            $decoded_body['debug_api_url'] = $api_url;
+        }
+
+        wp_send_json($decoded_body);
+    }
+
+    wp_die();
+}
 
 run_manageme_promo_api();

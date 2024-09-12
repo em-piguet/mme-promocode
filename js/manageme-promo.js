@@ -7,8 +7,10 @@
   "use strict";
 
   document.addEventListener("DOMContentLoaded", function () {
-    console.log("manage-me promo loaded"); // Debug
-    var base_url = "https://www.manage-me.pro/api/society/";
+    console.log("manage-me promo chargé");
+
+    // Vérifier si ajaxurl est déjà défini, sinon utiliser l'URL par défaut
+    var ajaxurl = manageme_promo_ajax.ajax_url;
     document.querySelectorAll(".mm-promo-form").forEach(function (form) {
       form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -20,30 +22,32 @@
         var promo = promoField.value;
 
         if (promo.length !== 0) {
-          var api_url = base_url + id + "/promocode/" + promo;
-          console.log("URL de l'API appelée :", api_url); // Debug
-
           spinner.style.display = "block";
 
-          fetch(api_url)
-            .then((response) => {
-              console.log("Statut de la réponse :", response.status); // Debug
-              return response.json();
-            })
+          // Utiliser FormData pour envoyer les données
+          var formData = new FormData();
+          formData.append("action", "validate_promo_code");
+          formData.append("society_id", id);
+          formData.append("promo_code", promo);
+
+          fetch(ajaxurl, {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
             .then((data) => {
-              console.log("Requête réussie"); // Debug
-              console.log("Réponse complète :", data); // Debug
+              console.log("Requête réussie", data);
               message(data, "success");
             })
             .catch((error) => {
-              console.error("Erreur :", error); // Debug
+              console.error("Erreur :", error);
               message({ Message: "Une erreur est survenue" }, "error");
             })
             .finally(() => {
               spinner.style.display = "none";
             });
         } else {
-          console.log("Le champ promo est vide"); // Debug
+          console.log("Le champ promo est vide");
         }
       });
     });
