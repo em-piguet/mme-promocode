@@ -2,11 +2,9 @@
 
 function display_promocode($atts)
 {
-
     $mysocietyID = $atts['societyid'];
 
-    if($mysocietyID) {
-
+    if ($mysocietyID) {
         $promocode = '
 		<div>
 		<form action=""  class="mm-promo-form" data-society="'.$mysocietyID.'">
@@ -15,7 +13,7 @@ function display_promocode($atts)
 				<input type="text" class="mm-promo-field" placeholder="Insérer votre code" value>
 			</label>
 
-			<button type="submit" class="mm-promo-submit fusion-button button-default button-medium button-3d">Valider
+			<button type="submit" class="mm-promo-submit">Valider
 			<svg class="mm-promo-spinner" style="display: none;" width="20" height="20" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
 			<defs>
 				<linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
@@ -58,12 +56,7 @@ function display_promocode($atts)
 	';
 
         return $promocode;
-
     } else {
-
         return '';
-
     }
-
-
 }
