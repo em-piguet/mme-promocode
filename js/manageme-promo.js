@@ -63,6 +63,7 @@
         infoElement.innerHTML = "✅ " + manageme_promo.codeActivated;
 
         if (typeof appOpen === "function") {
+          console.log(result.Url);
           const httpsUrl = result.Url.replace(/^http:/, "https:");
           appOpen(httpsUrl);
         } else {
