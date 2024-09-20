@@ -7,10 +7,8 @@
   "use strict";
 
   document.addEventListener("DOMContentLoaded", function () {
-    console.log("manage-me promo chargé");
-
     // Vérifier si ajaxurl est déjà défini, sinon utiliser l'URL par défaut
-    var ajaxurl = manageme_promo_ajax.ajax_url;
+    var ajaxurl = manageme_promo.ajax_url;
     document.querySelectorAll(".mm-promo-form").forEach(function (form) {
       form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -36,7 +34,6 @@
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log("Requête réussie", data);
               message(data, "success");
             })
             .catch((error) => {
@@ -63,10 +60,18 @@
         infoElement.innerHTML = result.Exceptions[0];
       }
       if (result.IsActive === true) {
-        infoElement.innerHTML =
-          '<a href="https://www.manage-me.pro' +
-          result.Url +
-          '">Aller au panier</a>';
+        infoElement.innerHTML = "✅ " + manageme_promo.codeActivated;
+
+        if (typeof appOpen === "function") {
+          appOpen(result.Url);
+        } else {
+          infoElement.innerHTML +=
+            ' - <a href="' +
+            result.Url +
+            '">' +
+            manageme_promo.goToCart +
+            "</a>";
+        }
       }
     }
   });

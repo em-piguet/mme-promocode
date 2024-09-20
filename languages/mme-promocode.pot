@@ -1,0 +1,57 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ManageMe Promo Code\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-20 08:02+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.11; wp-6.6.1\n"
+"X-Domain: mme-promocode"
+
+#: manageme-promocode.php:149
+msgid "An error has occured"
+msgstr ""
+
+#: manageme-promocode.php:49
+msgid "Code activated"
+msgstr ""
+
+#: manageme-promocode.php:50
+msgid "Go to cart"
+msgstr ""
+
+#. URI of the plugin
+msgid "manage-me.pro"
+msgstr ""
+
+#. Name of the plugin
+msgid "ManageMe Promo Code"
+msgstr ""
+
+#: inc/manageme-promocode-public.php:13
+msgid "Please insert your code"
+msgstr ""
+
+#. Description of the plugin
+msgid "Shortcode pour le code Promo -> [manageme_promocode societyid=\"XXX\"]"
+msgstr ""
+
+#: inc/manageme-promocode-public.php:16
+msgid "Validate"
+msgstr ""
+
+#. Author of the plugin
+msgid "Wonderweb"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "wonderweb.ch"
+msgstr ""

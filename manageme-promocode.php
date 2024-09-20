@@ -8,8 +8,9 @@
  * Plugin Name:       ManageMe Promo Code
  * Plugin URI:        manage-me.pro
  * Description:       Shortcode pour le code Promo -> [manageme_promocode societyid="XXX"]
- * Version:           1.0.7
+ * Version:           1.0.8
  * Author:            Wonderweb
+ * Text Domain:       mme-promocode
  * Author URI:        wonderweb.ch
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
@@ -21,7 +22,7 @@ if (!defined('WPINC')) {
     exit;
 }
 
-define('MANAGEME_PROMOCODE_VERSION', '1.0.7');
+define('MANAGEME_PROMOCODE_VERSION', '1.0.8');
 
 require plugin_dir_path(__FILE__).'inc/manageme-promocode-public.php';
 
@@ -43,11 +44,17 @@ function enqueue_manageme_promo_assets()
 {
     wp_enqueue_script('manageme-promo-api-js', plugin_dir_url(__FILE__).'js/manageme-promo.js', [], MANAGEME_PROMOCODE_VERSION, false);
     wp_enqueue_style('manageme-promo-api-css', plugin_dir_url(__FILE__).'css/manageme-promo.css', [], MANAGEME_PROMOCODE_VERSION, 'all');
-    wp_localize_script('manageme-promo-api-js', 'manageme_promo_ajax', [
+    wp_localize_script('manageme-promo-api-js', 'manageme_promo', [
         'ajax_url' => admin_url('admin-ajax.php'),
+        'codeActivated' => __('Code activated', 'mme-promocode'),
+        'goToCart' => __('Go to cart', 'mme-promocode'),
     ]);
 }
-
+function mme_promocode_load_textdomain()
+{
+    load_plugin_textdomain('mme-promocode', false, dirname(plugin_basename(__FILE__)).'/languages/');
+}
+add_action('plugins_loaded', 'mme_promocode_load_textdomain');
 function manageme_promocode_check_for_updates($transient)
 {
     if (empty($transient->checked)) {
@@ -90,8 +97,8 @@ function manageme_promocode_plugin_info($res, $action, $args)
         return $res;
     }
 
-    $github_user = 'votre-nom-utilisateur';
-    $github_repo = 'nom-du-repo';
+    $github_user = 'em-piguet';
+    $github_repo = 'mme-promocode';
 
     $github_response = wp_remote_get("https://api.github.com/repos/{$github_user}/{$github_repo}/releases/latest");
 
@@ -126,14 +133,6 @@ add_filter('plugins_api', 'manageme_promocode_plugin_info', 20, 3);
 add_action('wp_ajax_validate_promo_code', 'validate_promo_code_callback');
 add_action('wp_ajax_nopriv_validate_promo_code', 'validate_promo_code_callback');
 
-function enqueue_manageme_promo_script()
-{
-    wp_enqueue_script('manageme-promo', plugin_dir_url(__FILE__).'js/manageme-promo.js', ['jquery'], '1.0', true);
-    wp_localize_script('manageme-promo', 'manageme_promo_ajax', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-    ]);
-}
-add_action('wp_enqueue_scripts', 'enqueue_manageme_promo_script');
 function validate_promo_code_callback()
 {
     $society_id = $_POST['society_id'];
@@ -151,7 +150,7 @@ function validate_promo_code_callback()
 
     if (is_wp_error($response)) {
         wp_send_json_error([
-            'Message' => 'Une erreur est survenue',
+            'Message' => __('An error has occured', 'mme-promocode'),
             'code' => $response->get_error_code(),
             'message' => $response->get_error_message(),
             'debug_api_url' => $api_url, // Ajout de l'URL de l'API pour le débogage
