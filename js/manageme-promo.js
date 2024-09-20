@@ -63,14 +63,12 @@
         infoElement.innerHTML = "✅ " + manageme_promo.codeActivated;
 
         if (typeof appOpen === "function") {
-          appOpen(result.Url);
+          const httpsUrl = result.Url.replace(/^http:/, "https:");
+          appOpen(httpsUrl);
         } else {
+          const httpsUrl = result.Url.replace(/^http:/, "https:");
           infoElement.innerHTML +=
-            ' - <a href="' +
-            result.Url +
-            '">' +
-            manageme_promo.goToCart +
-            "</a>";
+            ' - <a href="' + httpsUrl + '">' + manageme_promo.goToCart + "</a>";
         }
       }
     }
