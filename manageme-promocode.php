@@ -2,7 +2,7 @@
 
 /**
  * @see              wonderweb.ch
- * @since             1.0.0
+ * @since             1.1
  *
  * @wordpress-plugin
  * Plugin Name:       ManageMe Promo Code
@@ -22,9 +22,9 @@ if (!defined('WPINC')) {
     exit;
 }
 
-define('MANAGEME_PROMOCODE_VERSION', '1.0.8');
+define('MANAGEME_PROMOCODE_VERSION', '1.1');
 
-require plugin_dir_path(__FILE__).'inc/manageme-promocode-public.php';
+require plugin_dir_path(__FILE__) . 'inc/manageme-promocode-public.php';
 
 /**
  * Begins execution of the plugin.
@@ -42,8 +42,8 @@ function run_manageme_promo_api()
  */
 function enqueue_manageme_promo_assets()
 {
-    wp_enqueue_script('manageme-promo-api-js', plugin_dir_url(__FILE__).'js/manageme-promo.js', [], MANAGEME_PROMOCODE_VERSION, false);
-    wp_enqueue_style('manageme-promo-api-css', plugin_dir_url(__FILE__).'css/manageme-promo.css', [], MANAGEME_PROMOCODE_VERSION, 'all');
+    wp_enqueue_script('manageme-promo-api-js', plugin_dir_url(__FILE__) . 'js/manageme-promo.js', [], MANAGEME_PROMOCODE_VERSION, false);
+    wp_enqueue_style('manageme-promo-api-css', plugin_dir_url(__FILE__) . 'css/manageme-promo.css', [], MANAGEME_PROMOCODE_VERSION, 'all');
     wp_localize_script('manageme-promo-api-js', 'manageme_promo', [
         'ajax_url' => admin_url('admin-ajax.php'),
         'codeActivated' => __('Code activated', 'mme-promocode'),
@@ -52,7 +52,7 @@ function enqueue_manageme_promo_assets()
 }
 function mme_promocode_load_textdomain()
 {
-    load_plugin_textdomain('mme-promocode', false, dirname(plugin_basename(__FILE__)).'/languages/');
+    load_plugin_textdomain('mme-promocode', false, dirname(plugin_basename(__FILE__)) . '/languages/');
 }
 add_action('plugins_loaded', 'mme_promocode_load_textdomain');
 function manageme_promocode_check_for_updates($transient)
@@ -141,7 +141,7 @@ function validate_promo_code_callback()
     $shop_url = get_field('shop_url', 'option');
 
     if ($shop_url) {
-        $api_url = $shop_url."/api/society/{$society_id}/promocode/{$promo_code}";
+        $api_url = $shop_url . "/api/society/{$society_id}/promocode/{$promo_code}";
     } else {
         $api_url = "https://www.manage-me.pro/api/society/{$society_id}/promocode/{$promo_code}";
     }
