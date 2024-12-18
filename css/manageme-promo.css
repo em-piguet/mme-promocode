@@ -1,11 +1,17 @@
 .mm-promo-form {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
   gap: 1em;
   align-items: center;
+  width: 100%;
+}
+.mm-promo-label {
+  flex: 1;
 }
 .mm-promo-field {
   max-width: 500px;
+  width: 100%;
 }
 .mm-promo-message {
   padding: 1em 0;
@@ -14,6 +20,7 @@
   display: flex !important;
   align-items: center;
   gap: 1rem;
+  padding: 0.5rem 0.75rem;
 }
 .mm-promo-info  {
   display: flex;
